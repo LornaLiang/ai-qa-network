@@ -1,0 +1,64 @@
+---
+title: "测试公式"
+layout: single
+---
+
+# 测试公式
+
+这是一个行内公式示例：$E = mc^2$  
+
+下面是一个块级公式示例：
+
+
+$$
+\int_0^1 x^2 dx = \frac{1}{3}
+$$
+
+Tip 示例：
+
+> [!TIP]
+>
+> 
+
+
+
+> [!NOTE]
+
+> [!IMPORTANT]
+
+> [!WARNING]
+
+> [!CAUTION]
+
+<div class="tip">
+这是一个 Tip 块
+</div>
+
+<div class="note">
+这是一个 Note 块
+</div>
+# 标题
+
+普通内容。
+
+行内公式：$E=mc^2$  
+
+块级公式：
+$$
+\int_0^1 x^2 dx = \frac{1}{3}
+$$
+
+Tip 示例：
+<div class="tip">
+这是一个 Tip 块。
+</div>
+
+Note 示例：
+<div class="note">
+这是一个 Note 块。
+</div>
+
+Warning 示例：
+<div class="warning">
+这是一个 Warning 块。
+</div>
