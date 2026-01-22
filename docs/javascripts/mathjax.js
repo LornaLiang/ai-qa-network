@@ -9,3 +9,11 @@ window.MathJax = {
     processHtmlClass: "arithmatex"
   }
 };
+
+// Material for MkDocs: re-render on every page change (instant navigation)
+document$.subscribe(() => {
+  if (window.MathJax && window.MathJax.typesetPromise) {
+    window.MathJax.typesetPromise();
+  }
+});
+

@@ -10,12 +10,14 @@ theme:
     - search.suggest
     - search.highlight
 
-nav:
-  - 首页: index.md
-  - Q&A:
-      - ROUGE vs BLEU: qa/rouge-vs-bleu.md
 
 markdown_extensions:
   - admonition
   - pymdownx.details
   - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
