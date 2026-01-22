@@ -1,1 +1,21 @@
 
+site_name: ai-qa-network
+site_description: Questions, answers, and links across modern AI.
+site_url: https://lornaliang.github.io/ai-qa-network/
+
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - search.suggest
+    - search.highlight
+
+nav:
+  - 首页: index.md
+  - Q&A:
+      - ROUGE vs BLEU: qa/rouge-vs-bleu.md
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
