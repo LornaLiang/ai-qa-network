@@ -1,8 +1,3 @@
----
-title: "测试公式"
-layout: single
----
-
 # 测试公式
 
 这是一个行内公式示例：$E = mc^2$  
@@ -30,35 +25,22 @@ Tip 示例：
 
 > [!CAUTION]
 
-<div class="tip">
-这是一个 Tip 块
-</div>
+!!! warning
+    这里是第一行  
+    这里是第二行
 
-<div class="note">
-这是一个 Note 块
-</div>
-# 标题
 
-普通内容。
 
-行内公式：$E=mc^2$  
 
-块级公式：
-$$
-\int_0^1 x^2 dx = \frac{1}{3}
-$$
 
-Tip 示例：
-<div class="tip">
-这是一个 Tip 块。
-</div>
+### 代码块示例
 
-Note 示例：
-<div class="note">
-这是一个 Note 块。
-</div>
+```
+int main(){
+int a;
+int b;
+int c=a+b;
+cout<<c;
+}
+```
 
-Warning 示例：
-<div class="warning">
-这是一个 Warning 块。
-</div>
