@@ -9,6 +9,10 @@ theme:
     - navigation.sections
     - search.suggest
     - search.highlight
+nav:
+  - 首页: index.md
+  - Q&A: qa/SUMMARY.md
+
 
 
 markdown_extensions:
@@ -21,3 +25,9 @@ extra_javascript:
   - javascripts/mathjax.js
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
+plugins:
+  - search
+  - gen-files:
+      scripts:
+        - scripts/gen_nav.py
+  - literate-nav
