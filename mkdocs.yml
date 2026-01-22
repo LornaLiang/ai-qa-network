@@ -11,7 +11,7 @@ theme:
     - search.highlight
 nav:
   - 首页: index.md
-  - Q&A: qa/SUMMARY.md
+  - Q&A: qa/
 
 
 
