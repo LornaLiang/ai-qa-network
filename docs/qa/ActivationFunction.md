@@ -125,7 +125,7 @@ $$
 \alpha \in (0,1)
 $$
 
-![](../assets/image/image/ActivationFunctions/leaky_relu_a0p1.png" width="50%")
+<img src="../assets/image/ActivationFunctions/leaky_relu_a0p1.png" title=" width=&quot;50%" style="zoom:50%;" />
 
 **作用**
 
