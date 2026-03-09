@@ -4,7 +4,6 @@ import mkdocs_gen_files
 
 ROOT = Path("docs/qa")
 
-# 10 categories (ordered)
 CATEGORIES = [
     "01-math",
     "02-deep-learning",
@@ -18,7 +17,6 @@ CATEGORIES = [
     "10-safety-privacy",
 ]
 
-# Sidebar display names
 CATEGORY_TITLES = {
     "01-math": "数学基础",
     "02-deep-learning": "深度学习",
@@ -32,7 +30,7 @@ CATEGORY_TITLES = {
     "10-safety-privacy": "安全与隐私",
 }
 
-EXCLUDE = {"SUMMARY.md", "_template.md"}  # index.md is generated
+EXCLUDE = {"SUMMARY.md", "_template.md"}  # index.md 由脚本生成
 H1_RE = re.compile(r"^\s*#(?!#)\s*(.+?)\s*$")
 
 
@@ -41,9 +39,7 @@ def read_h1_title(md_path: Path) -> str | None:
     lines = md_path.read_text(encoding="utf-8", errors="ignore").splitlines()
     if not lines:
         return None
-
-    # remove BOM if present
-    lines[0] = lines[0].lstrip("\ufeff")
+    lines[0] = lines[0].lstrip("\ufeff")  # remove BOM
 
     i = 0
     in_code = False
@@ -68,7 +64,6 @@ def read_h1_title(md_path: Path) -> str | None:
             if m:
                 return m.group(1).strip()
         i += 1
-
     return None
 
 
@@ -122,17 +117,16 @@ for cat in CATEGORIES:
         f.write("\n".join(page_lines) + "\n")
 
 
-# 2) Generate SUMMARY for mkdocs-literate-nav (STRICT: list only, no blank lines)
-summary_lines = ["# Q&A"]
+# 2) Generate SUMMARY for mkdocs-literate-nav (STRICT: list only, no headings, no blank lines)
+summary_lines: list[str] = []
 
 for cat in CATEGORIES:
-    # category entry (clickable -> category index page)
     summary_lines.append(f"- [{label(cat)}]({cat}/index.md)")
 
-    # nested entries (4-space indent is safer for literate-nav)
     cat_dir = ROOT / cat
     for p in list_articles(cat_dir):
         title = read_h1_title(p) or p.stem
+        # nested list item: 4 spaces indent
         summary_lines.append(f"    - [{title}]({cat}/{p.name})")
 
 with mkdocs_gen_files.open("qa/SUMMARY.md", "w", encoding="utf-8") as f:
