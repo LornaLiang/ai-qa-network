@@ -2,25 +2,49 @@ from pathlib import Path
 import re
 import mkdocs_gen_files
 
-QA_DIR = Path("docs/qa")
+ROOT = Path("docs/qa")
 
-EXCLUDE = {"SUMMARY.md", "_template.md", "index.md"}
+CATEGORIES = [
+    "01-math",
+    "02-deep-learning",
+    "03-transformer",
+    "04-llm",
+    "05-training-alignment",
+    "06-inference",
+    "07-rag",
+    "08-multimodal",
+    "09-evaluation",
+    "10-safety-privacy",
+]
 
-# 允许：# 标题 或 #标题；允许前面有空白
+CATEGORY_TITLES = {
+    "01-math": "数学基础",
+    "02-deep-learning": "深度学习",
+    "03-transformer": "Transformer",
+    "04-llm": "LLM",
+    "05-training-alignment": "训练与对齐",
+    "06-inference": "推理",
+    "07-rag": "RAG",
+    "08-multimodal": "多模态",
+    "09-evaluation": "评估与基准",
+    "10-safety-privacy": "安全与隐私",
+}
+
+EXCLUDE = {"SUMMARY.md", "_template.md"}  # index.md 由脚本生成
 H1_RE = re.compile(r"^\s*#(?!#)\s*(.+?)\s*$")
+
 
 def read_h1_title(md_path: Path) -> str | None:
     lines = md_path.read_text(encoding="utf-8", errors="ignore").splitlines()
+    if not lines:
+        return None
+    lines[0] = lines[0].lstrip("\ufeff")  # remove BOM
 
-    in_fenced_code = False
     i = 0
+    in_code = False
 
-    # 去掉可能的 UTF-8 BOM
-    if lines:
-        lines[0] = lines[0].lstrip("\ufeff")
-
-    # 跳过 YAML front matter（MkDocs 支持的 meta 区块）
-    if i < len(lines) and lines[i].strip() == "---":
+    # skip YAML front matter
+    if lines[i].strip() == "---":
         i += 1
         while i < len(lines):
             if lines[i].strip() == "---":
@@ -29,44 +53,75 @@ def read_h1_title(md_path: Path) -> str | None:
             i += 1
 
     while i < len(lines):
-        line = lines[i]
-        s = line.strip()
-
-        # 跳过 fenced code block
+        s = lines[i].strip()
         if s.startswith("```") or s.startswith("~~~"):
-            in_fenced_code = not in_fenced_code
+            in_code = not in_code
             i += 1
             continue
-
-        if not in_fenced_code:
-            m = H1_RE.match(line)
+        if not in_code:
+            m = H1_RE.match(lines[i])
             if m:
-                return m.group(1)
-
+                return m.group(1).strip()
         i += 1
-
     return None
 
-def fallback_title_from_filename(p: Path) -> str:
-    return p.stem
 
-qa_files = []
-if QA_DIR.exists():
-    for p in QA_DIR.glob("*.md"):
+def label(cat: str) -> str:
+    return CATEGORY_TITLES.get(cat, cat.replace("-", " ").title())
+
+
+def list_articles(cat_dir: Path) -> list[Path]:
+    files = []
+    if not cat_dir.exists():
+        return files
+    for p in cat_dir.glob("*.md"):
         if p.name in EXCLUDE:
             continue
-        qa_files.append(p)
+        if p.name.startswith("_"):
+            continue
+        if p.name.lower() == "index.md":
+            continue
+        files.append(p)
+    files.sort(key=lambda x: (read_h1_title(x) or x.stem).lower())
+    return files
 
-# 排序：按读到的标题；读不到则按文件名
-def sort_key(p: Path):
-    return (read_h1_title(p) or fallback_title_from_filename(p)).lower()
 
-qa_files.sort(key=sort_key)
+# 1) generate category index pages
+for cat in CATEGORIES:
+    cat_dir = ROOT / cat
+    cat_dir.mkdir(parents=True, exist_ok=True)  # ensure category exists even if empty
 
-lines = ["# Q&A\n"]
-for p in qa_files:
-    title = read_h1_title(p) or fallback_title_from_filename(p)
-    lines.append(f"- [{title}]({p.name})")
+    articles = list_articles(cat_dir)
+
+    lines = [
+        f"# {label(cat)}",
+        "",
+        "## 本分类文章",
+        "",
+    ]
+    if articles:
+        for p in articles:
+            title = read_h1_title(p) or p.stem
+            lines.append(f"- [{title}]({p.name})")
+    else:
+        lines.append("_暂无文章。_")
+
+    with mkdocs_gen_files.open(f"qa/{cat}/index.md", "w", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+
+
+# 2) generate SUMMARY for literate-nav
+summary = ["# Q&A", ""]
+
+for cat in CATEGORIES:
+    summary.append(f"- [{label(cat)}]({cat}/index.md)")
+
+    cat_dir = ROOT / cat
+    for p in list_articles(cat_dir):
+        title = read_h1_title(p) or p.stem
+        summary.append(f"  - [{title}]({cat}/{p.name})")
+
+    summary.append("")
 
 with mkdocs_gen_files.open("qa/SUMMARY.md", "w", encoding="utf-8") as f:
-    f.write("\n".join(lines) + "\n")
+    f.write("\n".join(summary).rstrip() + "\n")
