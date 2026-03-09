@@ -46,7 +46,7 @@ $$
 \sigma(z)\in(0,1)
 $$
 
-<img src="../assets/image/ActivationFunctions/sigmoid.png" width="50%">
+<img src="../../assets/image/ActivationFunctions/sigmoid.png" width="50%">
 
 **作用**
 
@@ -71,7 +71,7 @@ $$
 \tanh(z)\in(-1,1)
 $$
 
-<img src="../assets/image/ActivationFunctions/tanh.png" width="50%">
+<img src="../../assets/image/ActivationFunctions/tanh.png" width="50%">
 
 **作用**
 
@@ -95,7 +95,7 @@ $$
 \text{ReLU}(z)\in[0,\infty)
 $$
 
-<img src="../assets/image/ActivationFunctions/relu.png" width="50%">
+<img src="../../assets/image/ActivationFunctions/relu.png" width="50%">
 
 **作用**
 
@@ -125,7 +125,7 @@ $$
 \alpha \in (0,1)
 $$
 
-<img src="../assets/image/ActivationFunctions/leaky_relu_a0p1.png" title=" width=&quot;50%" style="zoom:50%;" />
+<img src="../../assets/image/ActivationFunctions/leaky_relu_a0p1.png" title=" width=&quot;50%" style="zoom:50%;" />
 
 **作用**
 
@@ -164,7 +164,7 @@ z, & z\ge 0 \\
 \end{cases}
 $$
 
-<img src="../assets/image/ActivationFunctions/elu_a1.png" width="50%">
+<img src="../../assets/image/ActivationFunctions/elu_a1.png" width="50%">
 
 **作用**
 
@@ -180,7 +180,7 @@ $$
 \text{GELU}(z)\approx 0.5z\left(1+\tanh\left(\sqrt{\frac{2}{\pi}}\left(z+0.044715z^3\right)\right)\right)
 $$
 
-<img src="../assets/image/ActivationFunctions/gelu_approx.png" width="50%">
+<img src="../../assets/image/ActivationFunctions/gelu_approx.png" width="50%">
 
 **作用**
 
@@ -196,7 +196,7 @@ $$
 \text{Softplus}(z)=\ln(1+e^{z})
 $$
 
-<img src="../assets/image/ActivationFunctions/softplus.png" width="50%">
+<img src="../../assets/image/ActivationFunctions/softplus.png" width="50%">
 
 **作用**
 
@@ -218,7 +218,7 @@ $$
 \sum_{i=1}^K \text{softmax}(z_i)=1
 $$
 
-![](../assets/image/ActivationFunctions/softmax.png)
+![](../../assets/image/ActivationFunctions/softmax.png)
 
 **作用**
 
