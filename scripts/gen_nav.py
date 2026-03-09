@@ -4,6 +4,7 @@ import mkdocs_gen_files
 
 ROOT = Path("docs/qa")
 
+# 10 categories (ordered)
 CATEGORIES = [
     "01-math",
     "02-deep-learning",
@@ -17,6 +18,7 @@ CATEGORIES = [
     "10-safety-privacy",
 ]
 
+# Sidebar display names
 CATEGORY_TITLES = {
     "01-math": "数学基础",
     "02-deep-learning": "深度学习",
@@ -30,15 +32,18 @@ CATEGORY_TITLES = {
     "10-safety-privacy": "安全与隐私",
 }
 
-EXCLUDE = {"SUMMARY.md", "_template.md"}  # index.md 由脚本生成
+EXCLUDE = {"SUMMARY.md", "_template.md"}  # index.md is generated
 H1_RE = re.compile(r"^\s*#(?!#)\s*(.+?)\s*$")
 
 
 def read_h1_title(md_path: Path) -> str | None:
+    """Read first H1 (# ...) from a markdown file (skip front matter and fenced code)."""
     lines = md_path.read_text(encoding="utf-8", errors="ignore").splitlines()
     if not lines:
         return None
-    lines[0] = lines[0].lstrip("\ufeff")  # remove BOM
+
+    # remove BOM if present
+    lines[0] = lines[0].lstrip("\ufeff")
 
     i = 0
     in_code = False
@@ -63,6 +68,7 @@ def read_h1_title(md_path: Path) -> str | None:
             if m:
                 return m.group(1).strip()
         i += 1
+
     return None
 
 
@@ -71,9 +77,11 @@ def label(cat: str) -> str:
 
 
 def list_articles(cat_dir: Path) -> list[Path]:
-    files = []
+    """List *.md in a category directory (non-recursive), excluding index.md and meta files."""
+    files: list[Path] = []
     if not cat_dir.exists():
         return files
+
     for p in cat_dir.glob("*.md"):
         if p.name in EXCLUDE:
             continue
@@ -82,46 +90,50 @@ def list_articles(cat_dir: Path) -> list[Path]:
         if p.name.lower() == "index.md":
             continue
         files.append(p)
+
+    # sort by H1 title (fallback to filename)
     files.sort(key=lambda x: (read_h1_title(x) or x.stem).lower())
     return files
 
 
-# 1) generate category index pages
+# 1) Generate category index pages: docs/qa/<category>/index.md
 for cat in CATEGORIES:
     cat_dir = ROOT / cat
     cat_dir.mkdir(parents=True, exist_ok=True)  # ensure category exists even if empty
 
     articles = list_articles(cat_dir)
 
-    lines = [
+    page_lines = [
         f"# {label(cat)}",
         "",
         "## 本分类文章",
         "",
     ]
+
     if articles:
         for p in articles:
             title = read_h1_title(p) or p.stem
-            lines.append(f"- [{title}]({p.name})")
+            # index.md is inside the category dir, so link to filename directly
+            page_lines.append(f"- [{title}]({p.name})")
     else:
-        lines.append("_暂无文章。_")
+        page_lines.append("_暂无文章。_")
 
     with mkdocs_gen_files.open(f"qa/{cat}/index.md", "w", encoding="utf-8") as f:
-        f.write("\n".join(lines) + "\n")
+        f.write("\n".join(page_lines) + "\n")
 
 
-# 2) generate SUMMARY for literate-nav
-summary = ["# Q&A", ""]
+# 2) Generate SUMMARY for mkdocs-literate-nav (STRICT: list only, no blank lines)
+summary_lines = ["# Q&A"]
 
 for cat in CATEGORIES:
-    summary.append(f"- [{label(cat)}]({cat}/index.md)")
+    # category entry (clickable -> category index page)
+    summary_lines.append(f"- [{label(cat)}]({cat}/index.md)")
 
+    # nested entries (4-space indent is safer for literate-nav)
     cat_dir = ROOT / cat
     for p in list_articles(cat_dir):
         title = read_h1_title(p) or p.stem
-        summary.append(f"  - [{title}]({cat}/{p.name})")
-
-    summary.append("")
+        summary_lines.append(f"    - [{title}]({cat}/{p.name})")
 
 with mkdocs_gen_files.open("qa/SUMMARY.md", "w", encoding="utf-8") as f:
-    f.write("\n".join(summary).rstrip() + "\n")
+    f.write("\n".join(summary_lines) + "\n")
