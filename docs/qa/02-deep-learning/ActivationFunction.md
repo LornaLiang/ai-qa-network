@@ -46,7 +46,7 @@ $$
 \sigma(z)\in(0,1)
 $$
 
-<img src="../../assets/image/ActivationFunctions/sigmoid.png" width="50%">
+<img src="../../assets/image/ActivationFunctions/sigmoid.png"  style="display:block; margin:0 auto; width:50%; height:auto;" />
 
 **作用**
 
