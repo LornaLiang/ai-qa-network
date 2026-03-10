@@ -196,7 +196,7 @@ $$
 \text{Softplus}(z)=\ln(1+e^{z})
 $$
 
-<img src="../../assets/image/ActivationFunctions/softplus.png">
+![](../../assets/image/ActivationFunctions/softplus.png){ width="50%" }
 
 **作用**
 
