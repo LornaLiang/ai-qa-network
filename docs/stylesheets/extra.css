@@ -1,0 +1,12 @@
+/* Make images centered when class 'img-center' is applied */
+img.img-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Optional: if you also apply the class to the link wrapper */
+a.img-center {
+  display: block;
+  text-align: center;
+}

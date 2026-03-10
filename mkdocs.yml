@@ -32,3 +32,5 @@ plugins:
       scripts:
         - scripts/gen_nav.py
   - literate-nav
+extra_css:
+  - stylesheets/extra.css
