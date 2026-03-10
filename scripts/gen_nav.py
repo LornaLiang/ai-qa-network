@@ -15,6 +15,7 @@ CATEGORIES = [
     "08-multimodal",
     "09-evaluation",
     "10-safety-privacy",
+    "11-reinforcement-learning",
 ]
 
 CATEGORY_TITLES = {
@@ -28,6 +29,8 @@ CATEGORY_TITLES = {
     "08-multimodal": "多模态",
     "09-evaluation": "评估与基准",
     "10-safety-privacy": "安全与隐私",
+    "11-reinforcement-learning": "强化学习"
+
 }
 
 EXCLUDE = {"SUMMARY.md", "_template.md"}  # index.md 由脚本生成
